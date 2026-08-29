@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -28,6 +30,16 @@ html[data-theme="dark"]{
   --shadow-1: 0 1px 2px rgba(0,0,0,0.4);
   color-scheme: dark;
 }
+html[data-theme="minimal-dark"]{
+  --bg:#090A0A; --surface:#111313; --surface-alt:#191B1B; --border:#292D2C;
+  --text:#F3F5F4; --text-muted:#A7AEAB; --text-faint:#737B77;
+  --accent:#DDE8E2; --accent-strong:#FFFFFF; --accent-contrast:#090A0A; --accent-soft:#26312C;
+  --tier2:#D7B875; --tier2-soft:#342B1B;
+  --tier3:#9DB2C9; --tier3-soft:#222B35;
+  --danger:#F09A8E; --danger-soft:#452320;
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.55);
+  color-scheme: dark;
+}
 html[data-theme="dark-blue"]{
   --bg:#0E1420; --surface:#141C2C; --surface-alt:#1B2537; --border:#2A3650;
   --text:#E9EDF6; --text-muted:#94A1BC; --text-faint:#647089;
@@ -45,6 +57,26 @@ html[data-theme="dark-purple"]{
   --tier2:#D9A857; --tier2-soft:#332715;
   --tier3:#6FA8C9; --tier3-soft:#1C2C38;
   --danger:#E08A7C; --danger-soft:#35201D;
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.45);
+  color-scheme: dark;
+}
+html[data-theme="dark-red"]{
+  --bg:#1D0D11; --surface:#281318; --surface-alt:#361A21; --border:#53303A;
+  --text:#F6E9EC; --text-muted:#C19CA6; --text-faint:#8D6470;
+  --accent:#D9687C; --accent-strong:#F08389; --accent-contrast:#2A070C; --accent-soft:#442029;
+  --tier2:#E0B362; --tier2-soft:#3A2B1A;
+  --tier3:#91A9CF; --tier3-soft:#232C43;
+  --danger:#F09A8E; --danger-soft:#4A201E;
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.45);
+  color-scheme: dark;
+}
+html[data-theme="dark-pink"]{
+  --bg:#1D0F1A; --surface:#291423; --surface-alt:#371A2D; --border:#56334B;
+  --text:#F7EAF4; --text-muted:#C4A5BB; --text-faint:#906F89;
+  --accent:#E16BB0; --accent-strong:#F291C8; --accent-contrast:#2B0B20; --accent-soft:#49263E;
+  --tier2:#E0B362; --tier2-soft:#3A2B1A;
+  --tier3:#9AA9E0; --tier3-soft:#252B48;
+  --danger:#F09A9A; --danger-soft:#4A2528;
   --shadow-1: 0 1px 2px rgba(0,0,0,0.45);
   color-scheme: dark;
 }
@@ -84,7 +116,7 @@ svg.ic{width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:1.7
 .stat .stat-top{display:flex; align-items:center; gap:6px; color:var(--text-muted); font-size:12.5px;}
 .stat .stat-val{font-size:20px; font-weight:600; letter-spacing:-0.01em;}
 .stat.total .stat-val{color:var(--accent-strong);}
-html[data-theme="dark"] .stat.total .stat-val, html[data-theme="dark-blue"] .stat.total .stat-val, html[data-theme="dark-purple"] .stat.total .stat-val{color:var(--accent);}
+html[data-theme="dark"] .stat.total .stat-val, html[data-theme="minimal-dark"] .stat.total .stat-val, html[data-theme="dark-blue"] .stat.total .stat-val, html[data-theme="dark-purple"] .stat.total .stat-val, html[data-theme="dark-red"] .stat.total .stat-val, html[data-theme="dark-pink"] .stat.total .stat-val{color:var(--accent);}
 
 /* section headers */
 .section-head{display:flex; align-items:center; justify-content:space-between; margin:22px 0 10px;}
@@ -144,7 +176,7 @@ html[data-theme="dark"] .stat.total .stat-val, html[data-theme="dark-blue"] .sta
 /* results */
 .result-top{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:18px; text-align:center; box-shadow:var(--shadow-1); margin-bottom:12px;}
 .result-top .grand{font-size:34px; font-weight:700; letter-spacing:-0.02em; color:var(--accent-strong);}
-html[data-theme="dark"] .result-top .grand, html[data-theme="dark-blue"] .result-top .grand, html[data-theme="dark-purple"] .result-top .grand{color:var(--accent);}
+html[data-theme="dark"] .result-top .grand, html[data-theme="minimal-dark"] .result-top .grand, html[data-theme="dark-blue"] .result-top .grand, html[data-theme="dark-purple"] .result-top .grand, html[data-theme="dark-red"] .result-top .grand, html[data-theme="dark-pink"] .result-top .grand{color:var(--accent);}
 .result-top .grand-label{font-size:12.5px; color:var(--text-muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px;}
 .reconcile-note{font-size:12px; color:var(--tier2); margin-top:8px;}
 
@@ -156,10 +188,21 @@ table.people td.amt{text-align:right; font-weight:600;}
 
 .breakdown{margin-top:14px;}
 .court-bd{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); margin-bottom:10px; overflow:hidden;}
-.court-bd-head{display:flex; align-items:center; justify-content:space-between; padding:12px; cursor:pointer;}
-.court-bd-head .name{font-weight:600; font-size:14.5px;}
+.court-bd-head{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:12px; cursor:pointer;}
+.court-bd-head .name{font-weight:600; font-size:14.5px; min-width:0; overflow-wrap:anywhere;}
+.court-bd-head-actions{display:flex; align-items:center; gap:6px; flex-shrink:0;}
 .court-bd-head .total{color:var(--text-muted); font-size:13px;}
+.copy-court{padding:5px 7px;}
+.copy-court.copied{color:var(--accent); border-color:var(--accent);}
 .court-bd-body{padding:0 12px 14px; border-top:1px solid var(--border);}
+.court-payers{margin:12px 0 10px; padding:10px; border:1px solid var(--border); border-radius:var(--radius-sm); background:var(--surface-alt);}
+.court-payers-head{font-size:11.5px; font-weight:600; text-transform:uppercase; letter-spacing:.05em; color:var(--text-muted); margin-bottom:8px;}
+.court-payer-list{display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:6px;}
+.court-payer{display:flex; align-items:baseline; justify-content:space-between; gap:8px; min-width:0; padding:7px 8px; border:1px solid var(--border); border-radius:6px; background:var(--surface);}
+.court-payer .name{min-width:0; overflow-wrap:anywhere; font-size:13px;}
+.court-payer .pays-label{color:var(--text-muted); font-size:12px; margin-left:3px;}
+.court-payer .amt{flex-shrink:0; font-weight:700; font-size:13.5px;}
+.court-payers-empty{font-size:12.5px; color:var(--text-faint);}
 .timeline{display:flex; height:26px; border-radius:6px; overflow:hidden; margin:12px 0 10px; border:1px solid var(--border);}
 .tl-seg{position:relative; border-right:1px solid var(--surface); min-width:2px;}
 .tl-seg:last-child{border-right:none;}
@@ -167,12 +210,10 @@ table.people td.amt{text-align:right; font-weight:600;}
 .tl-seg.tier-1{background:var(--tier2-soft);}
 .tl-seg.tier-2{background:var(--tier3-soft);}
 .tl-seg.empty{background:repeating-linear-gradient(135deg, var(--danger-soft), var(--danger-soft) 4px, transparent 4px, transparent 8px);}
-.seg-list{display:flex; flex-direction:column; gap:6px;}
-.seg-item{display:flex; justify-content:space-between; gap:8px; font-size:12.5px; padding:6px 8px; border-radius:6px; background:var(--surface-alt);}
-.seg-item .seg-time{color:var(--text-muted); flex-shrink:0;}
-.seg-item .seg-mid{color:var(--text-faint); flex:1; text-align:center;}
-.seg-item .seg-share{font-weight:600; flex-shrink:0;}
-.seg-item.empty{color:var(--danger);}
+.payer-seg-list{display:flex; flex-direction:column; gap:6px;}
+.payer-seg-item{padding:8px; border-radius:6px; background:var(--surface-alt);}
+.payer-seg-meta{font-size:12.5px; color:var(--text-muted); font-family:'Space Grotesk',system-ui,sans-serif; font-variant-numeric:tabular-nums;}
+.payer-seg-names{margin-top:3px; color:var(--text); font-size:13px; overflow-wrap:anywhere;}
 
 /* settings drawer */
 .overlay{position:fixed; inset:0; background:rgba(10,12,8,.4); opacity:0; pointer-events:none; transition:opacity .18s ease; z-index:40;}
@@ -294,7 +335,8 @@ const ICON = {
   coins:'<ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v5c0 1.7 2.7 3 6 3s6-1.3 6-3V7"/><path d="M3 12v5c0 1.7 2.7 3 6 3 2 0 3.8-.4 5-1.1"/><ellipse cx="17" cy="13.5" rx="4.2" ry="2.2"/><path d="M12.8 13.5v4c0 1.2 1.9 2.2 4.2 2.2s4.2-1 4.2-2.2v-4"/>',
   court:'<rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M12 5v14M3 12h18"/>',
   clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
-  remove:'<path d="M18 6L6 18M6 6l12 12"/>'
+  remove:'<path d="M18 6L6 18M6 6l12 12"/>',
+  check:'<path d="M5 12l4 4L19 6"/>'
 };
 function ic(name, cls){ return `<svg class="ic ${cls||''}" viewBox="0 0 24 24">${ICON[name]||''}</svg>`; }
 
@@ -308,13 +350,15 @@ const STR = {
     noCourts:'ยังไม่มีคอร์ด — กดปุ่ม "เพิ่มคอร์ด" เพื่อเริ่มต้น',
     noPlayers:'ยังไม่มีผู้เล่นในคอร์ดนี้',
     noResults:'เพิ่มคอร์ดและผู้เล่นเพื่อดูยอดที่ต้องจ่าย',
+    courtPayers:'ยอดที่แต่ละคนจ่ายในคอร์ดนี้', paysLabel:'จ่าย:', noPayers:'ยังไม่มีผู้เล่นที่คำนวณยอดได้',
     playersLabel:n=>`${n} คน`,
     settings:'ตั้งค่า',
+    autoSave:'บันทึกเซสชันอัตโนมัติ', autoSaveDesc:'บันทึกคอร์ด ผู้เล่น และการตั้งค่าโดยอัตโนมัติ',
+    copyCompact:'คัดลอกสรุปย่อ', copied:'คัดลอกแล้ว', copyFailed:'คัดลอกไม่สำเร็จ', baht:'บาท', grandTotalCompact:'รวม',
     language:'ภาษา', languageDesc:'ภาษาที่ใช้ในแอป',
     theme:'ธีม', themeDesc:'โทนสีของแอป',
-    themeWhite:'สว่าง', themeDark:'มืด', themeDarkBlue:'มืด-น้ำเงิน', themeDarkPurple:'มืด-ม่วง', themeSystem:'ตามระบบ',
+    themeWhite:'สว่าง', themeDark:'มืด (ทั้งหมด)', themeMinimalDark:'มินิมอล-มืด',
     timeFormat:'รูปแบบเวลา', timeFormatDesc:'วิธีแสดงเวลาในแอป',
-    accuratePrice:'ราคาละเอียด', accuratePriceDesc:'แสดงทศนิยม เช่น ฿23.50',
     pricing:'ราคาคอร์ด', pricingDesc:'ราคาจะเริ่มใช้ตั้งแต่เวลาที่กำหนดจนถึงราคาถัดไป',
     addRate:'เพิ่มช่วงราคา',
     dangerZone:'จัดการข้อมูล',
@@ -330,8 +374,7 @@ const STR = {
     emptyName:'กรุณาใส่ชื่อผู้เล่น',
     duplicateName:n=>`มีผู้เล่นชื่อ "${n}" ซ้ำในคอร์ดนี้ ยอดจะถูกรวมเข้าด้วยกัน`,
     outsideBooking:'เวลาของผู้เล่นอยู่นอกช่วงเวลาที่จองคอร์ด',
-    invalidTime:'รูปแบบเวลาไม่ถูกต้อง',
-    roundingNote:'ยอดรวมอาจต่างจากผลรวมของแต่ละคนเล็กน้อยเนื่องจากการปัดเศษ',
+    invalidTime:'รูปแบบเวลาไม่ถูกต้อง', mixedRates:'หลายอัตรา',
     unassignedNote:amt=>`มี ${amt} ที่ไม่ถูกเรียกเก็บจากใครเลย เนื่องจากไม่มีผู้เล่นในบางช่วงเวลา`,
     start:'เริ่ม', end:'สิ้นสุด'
   },
@@ -343,13 +386,15 @@ const STR = {
     noCourts:'No courts yet — tap "Add court" to start',
     noPlayers:'No players on this court yet',
     noResults:'Add a court and players to see the split',
+    courtPayers:'What each person pays on this court', paysLabel:'pays:', noPayers:'No payer total is available yet',
     playersLabel:n=>`${n} players`,
     settings:'Settings',
+    autoSave:'Auto-save session', autoSaveDesc:'Automatically save courts, players, and settings',
+    copyCompact:'Copy compact result', copied:'Copied', copyFailed:'Copy failed', baht:'baht', grandTotalCompact:'Total',
     language:'Language', languageDesc:'App interface language',
     theme:'Theme', themeDesc:'Color scheme of the app',
-    themeWhite:'White', themeDark:'Dark', themeDarkBlue:'Dark Blue', themeDarkPurple:'Dark Purple', themeSystem:'System',
+    themeWhite:'White', themeDark:'Dark (Completely)', themeMinimalDark:'Minimal Dark',
     timeFormat:'Time format', timeFormatDesc:'How times are displayed',
-    accuratePrice:'Accurate price', accuratePriceDesc:'Keep decimals, e.g. ฿23.50',
     pricing:'Court pricing', pricingDesc:'Each rate applies from its start time until the next one begins.',
     addRate:'Add rate',
     dangerZone:'Data',
@@ -365,8 +410,7 @@ const STR = {
     emptyName:'Enter a player name',
     duplicateName:n=>`"${n}" appears more than once on this court — shares will be combined.`,
     outsideBooking:"Player time falls outside the court's booking time",
-    invalidTime:'Invalid time',
-    roundingNote:'Totals may differ slightly from the sum of shares due to rounding.',
+    invalidTime:'Invalid time', mixedRates:'Mixed rates',
     unassignedNote:amt=>`${amt} is unassigned because no player was active during part of the booking.`,
     start:'Start', end:'End'
   }
@@ -418,10 +462,8 @@ function nativeTimeVal(mins){ const h=Math.floor(mins/60), m=mins%60; return pad
 
 /* ---------- money ---------- */
 function fmtMoney(amount){
-  let a = amount;
-  if(!state.settings.accuratePrice) a = Math.round(a);
-  const opts = state.settings.accuratePrice ? {minimumFractionDigits:2, maximumFractionDigits:2} : {minimumFractionDigits:0, maximumFractionDigits:0};
-  return '\u0E3F' + a.toLocaleString('en-US', opts);
+  const a = Number.isFinite(Number(amount)) ? Number(amount) : 0;
+  return '\u0E3F' + a.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
 }
 
 /* ---------- state ---------- */
@@ -432,7 +474,7 @@ function uid(){ return 'id'+(idc++)+Math.random().toString(36).slice(2,7); }
 function defaultState(){
   return {
     settings:{
-      language:'th', theme:'white', timeFormat:24, accuratePrice:true,
+      language:'th', theme:'white', timeFormat:24, autoSave:true,
       pricingRules:[ {id:uid(), start:660, price:120}, {id:uid(), start:960, price:160} ]
     },
     courts:[]
@@ -447,11 +489,20 @@ function loadState(){
     if(!raw) return defaultState();
     const parsed = JSON.parse(raw);
     if(!parsed || !parsed.settings || !parsed.courts) return defaultState();
+    let migrated = false;
+    if(typeof parsed.settings.autoSave!=='boolean'){ parsed.settings.autoSave = true; migrated = true; }
+    if(Object.prototype.hasOwnProperty.call(parsed.settings, 'accuratePrice')){ delete parsed.settings.accuratePrice; migrated = true; }
+    if(!['white','dark','minimal-dark'].includes(parsed.settings.theme)){
+      parsed.settings.theme = parsed.settings.theme==='system' ? 'white' : 'dark';
+      migrated = true;
+    }
+    if(migrated) localStorage.setItem(STORE_KEY, JSON.stringify(parsed));
     return parsed;
   }catch(e){ return defaultState(); }
 }
 let saveTimer = null;
-function persist(){
+function persist(force=false){
+  if(!force && state.settings.autoSave===false) return;
   clearTimeout(saveTimer);
   saveTimer = setTimeout(()=>{
     try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){}
@@ -479,7 +530,7 @@ function rateAt(minute, rules){
 }
 function computeCourt(court){
   const warnings = [];
-  const result = { id:court.id, name:court.name, total:0, allocated:0, unassigned:0, segments:[], playerTotals:{}, invalid:false };
+  const result = { id:court.id, name:court.name, start:court.start, end:court.end, total:0, allocated:0, unassigned:0, segments:[], playerTotals:{}, payerIntervals:[], invalid:false };
   if(court.end<=court.start){
     result.invalid = true;
     warnings.push({type:'err', msg:t('endBeforeStart')});
@@ -527,8 +578,63 @@ function computeCourt(court){
     }
     result.segments.push({ start:segStart, end:segEnd, rate: rate?rate.price:null, players: active.map(p=>p.name), share: active.length? cost/active.length : 0, cost, priced });
   }
+  result.payerIntervals = buildPayerIntervals(activePlayers, result.playerTotals, rules);
   result.warnings = warnings;
   return result;
+}
+
+function intervalRateText(start, end, rules){
+  const points = [start, end, ...rules.filter(r=>r.start>start && r.start<end).map(r=>r.start)].sort((a,b)=>a-b);
+  const prices = [];
+  for(let i=0;i<points.length-1;i++){
+    const rate = rateAt(points[i], rules);
+    const value = rate ? rate.price : null;
+    if(!prices.includes(value)) prices.push(value);
+  }
+  if(prices.length===1 && prices[0]!==null) return '฿'+prices[0]+'/hr';
+  return prices.length>1 ? t('mixedRates') : t('invalidTime');
+}
+function buildPayerIntervals(activePlayers, playerTotals, rules){
+  const byInterval = new Map();
+  activePlayers.forEach(p=>{
+    const key = p.start+'|'+p.end;
+    if(!byInterval.has(key)) byInterval.set(key, {start:p.start, end:p.end, names:[]});
+    const group = byInterval.get(key);
+    if(!group.names.some(n=>n.toLowerCase()===p.name.toLowerCase())) group.names.push(p.name);
+  });
+  return [...byInterval.values()]
+    .map(group=>({...group, amount:group.names.length ? playerTotals[group.names[0]]||0 : 0, rateText:intervalRateText(group.start, group.end, rules)}))
+    .sort((a,b)=>a.start-b.start || b.end-a.end || a.names[0].localeCompare(b.names[0]));
+}
+
+function compactAmount(amount){
+  return Number(amount||0).toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:2});
+}
+function compactTime(minutes){
+  return fmtTime(minutes, 24).replace(':','.');
+}
+function compactCourtText(courtResult){
+  const lines = [`- ${courtResult.name}: ${compactTime(courtResult.start)}-${compactTime(courtResult.end)}`];
+  const payers = Object.entries(courtResult.playerTotals);
+  payers.forEach(([name, amount])=>lines.push(`${name}: ${compactAmount(amount)} ${t('baht')}`));
+  lines.push('', `  ${t('grandTotalCompact')} ${compactAmount(courtResult.total)} ${t('baht')}`);
+  return lines.join('\n');
+}
+async function copyText(text){
+  if(navigator.clipboard && window.isSecureContext){
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+  const area = document.createElement('textarea');
+  area.value = text;
+  area.setAttribute('readonly','');
+  area.style.position = 'fixed';
+  area.style.opacity = '0';
+  document.body.appendChild(area);
+  area.select();
+  const copied = document.execCommand('copy');
+  area.remove();
+  if(!copied) throw new Error('copy failed');
 }
 
 function computeAll(){
@@ -727,7 +833,6 @@ function renderResults(){
     <div class="grand-label">${t('total')}</div>
     <div class="grand money">${fmtMoney(data.grandTotal)}</div>
     ${totalUnassigned>0.001? `<div class="reconcile-note">${t('unassignedNote', fmtMoney(totalUnassigned))}</div>`:''}
-    ${!state.settings.accuratePrice? `<div class="reconcile-note">${t('roundingNote')}</div>`:''}
   </div>`;
 
   if(names.length){
@@ -743,7 +848,8 @@ function renderResults(){
     html += `<div class="court-bd" data-bd="${cr.id}">
       <div class="court-bd-head" data-role="toggle-bd">
         <span class="name">${escapeAttr(cr.name)}</span>
-        <span style="display:flex;align-items:center;gap:8px;">
+        <span class="court-bd-head-actions">
+          <button class="btn sm copy-court" data-role="copy-court" aria-label="${t('copyCompact')}" title="${t('copyCompact')}">${ic('copy')}</button>
           <span class="total money">${cr.invalid? '\u2014' : fmtMoney(cr.total)}</span>
           ${ic('chevronDown', isOpen? 'chev-open':'')}
         </span>
@@ -751,6 +857,14 @@ function renderResults(){
       <div class="court-bd-body" style="display:${isOpen?'block':'none'}">
         ${(cr.warnings||[]).map(w=>`<div class="warn-banner ${w.type==='err'?'err':''}" style="border-top:none;border-radius:6px;margin-bottom:8px;">${ic('warning')}<span>${w.msg}</span></div>`).join('')}
         ${cr.invalid? '' : `
+        <div class="court-payers">
+          <div class="court-payers-head">${t('courtPayers')}</div>
+          ${Object.keys(cr.playerTotals).length ? `<div class="court-payer-list">
+            ${Object.entries(cr.playerTotals).sort((a,b)=>b[1]-a[1] || a[0].localeCompare(b[0])).map(([name, amount])=>`
+              <div class="court-payer"><span class="name">${escapeAttr(name)} <span class="pays-label">${t('paysLabel')}</span></span><span class="amt money">${fmtMoney(amount)}</span></div>
+            `).join('')}
+          </div>` : `<div class="court-payers-empty">${t('noPayers')}</div>`}
+        </div>
         <div class="timeline">
           ${cr.segments.map(s=>{
             const width = ((s.end-s.start)/(cr.segments[cr.segments.length-1].end-cr.segments[0].start))*100;
@@ -758,17 +872,13 @@ function renderResults(){
             return `<div class="tl-seg ${cls}" style="flex:0 0 ${width}%"></div>`;
           }).join('')}
         </div>
-        <div class="seg-list">
-          ${cr.segments.map(s=>{
-            const empty = s.players.length===0;
-            const rateTxt = s.priced!==false ? '\u0E3F'+s.rate+'/hr' : t('invalidTime');
-            const mid = empty ? '\u2014' : t('playersLabel', s.players.length);
-            return `<div class="seg-item ${empty?'empty':''}">
-              <span class="seg-time">${fmtTime(s.start)}\u2013${fmtTime(s.end)} \u00b7 ${rateTxt}</span>
-              <span class="seg-mid">${mid}</span>
-              <span class="seg-share">${empty? (s.cost>0.001? fmtMoney(s.cost):'\u2014') : fmtMoney(s.share)}</span>
-            </div>`;
-          }).join('')}
+        <div class="payer-seg-list">
+          ${cr.payerIntervals.map(interval=>`
+            <div class="payer-seg-item">
+              <div class="payer-seg-meta">${fmtTime(interval.start)}–${fmtTime(interval.end)} · ${interval.rateText} (${fmtMoney(interval.amount)})</div>
+              <div class="payer-seg-names">${interval.names.map(escapeAttr).join(', ')}</div>
+            </div>
+          `).join('')}
         </div>`}
       </div>
     </div>`;
@@ -776,8 +886,33 @@ function renderResults(){
   html += `</div>`;
   el.innerHTML = html;
 
+  el.querySelectorAll('[data-role="copy-court"]').forEach(btn=>{
+    btn.addEventListener('click', async e=>{
+      e.stopPropagation();
+      const id = btn.closest('.court-bd').getAttribute('data-bd');
+      const courtResult = data.courtsResult.find(cr=>cr.id===id);
+      try{
+        await copyText(compactCourtText(courtResult));
+        btn.innerHTML = ic('check');
+        btn.classList.add('copied');
+        btn.setAttribute('aria-label', t('copied'));
+        btn.setAttribute('title', t('copied'));
+        setTimeout(()=>{
+          if(!btn.isConnected) return;
+          btn.innerHTML = ic('copy');
+          btn.classList.remove('copied');
+          btn.setAttribute('aria-label', t('copyCompact'));
+          btn.setAttribute('title', t('copyCompact'));
+        }, 1400);
+      }catch(err){
+        btn.setAttribute('aria-label', t('copyFailed'));
+        btn.setAttribute('title', t('copyFailed'));
+      }
+    });
+  });
   el.querySelectorAll('[data-role="toggle-bd"]').forEach(h=>{
-    h.addEventListener('click', ()=>{
+    h.addEventListener('click', e=>{
+      if(e.target.closest('[data-role="copy-court"]')) return;
       const id = h.closest('.court-bd').getAttribute('data-bd');
       if(expanded.has(id)) expanded.delete(id); else expanded.add(id);
       renderResults();
@@ -831,9 +966,7 @@ function renderDrawer(){
         <div class="set-control"><select class="dd" id="themeSel">
           <option value="white" ${s.theme==='white'?'selected':''}>${t('themeWhite')}</option>
           <option value="dark" ${s.theme==='dark'?'selected':''}>${t('themeDark')}</option>
-          <option value="dark-blue" ${s.theme==='dark-blue'?'selected':''}>${t('themeDarkBlue')}</option>
-          <option value="dark-purple" ${s.theme==='dark-purple'?'selected':''}>${t('themeDarkPurple')}</option>
-          <option value="system" ${s.theme==='system'?'selected':''}>${t('themeSystem')}</option>
+          <option value="minimal-dark" ${s.theme==='minimal-dark'?'selected':''}>${t('themeMinimalDark')}</option>
         </select></div>
       </div>
       <div class="set-row">
@@ -846,8 +979,8 @@ function renderDrawer(){
         </div>
       </div>
       <div class="set-row">
-        <div class="set-label"><span class="set-title">${t('accuratePrice')}</span><span class="set-desc">${t('accuratePriceDesc')}</span></div>
-        <div class="set-control"><label class="switch"><input type="checkbox" id="accChk" ${s.accuratePrice?'checked':''}><span class="slider"></span></label></div>
+        <div class="set-label"><span class="set-title">${t('autoSave')}</span><span class="set-desc">${t('autoSaveDesc')}</span></div>
+        <div class="set-control"><label class="switch"><input type="checkbox" id="autoSaveChk" ${s.autoSave!==false?'checked':''}><span class="slider"></span></label></div>
       </div>
     </div>
     <div class="set-group">
@@ -871,7 +1004,7 @@ function renderDrawer(){
   $('#fmtCtl').querySelectorAll('button').forEach(b=>{
     b.addEventListener('click', ()=>{ state.settings.timeFormat = Number(b.getAttribute('data-v')); persist(); renderDrawer(); renderAll(); });
   });
-  $('#accChk').addEventListener('change', e=>{ state.settings.accuratePrice = e.target.checked; persist(); renderResults(); });
+  $('#autoSaveChk').addEventListener('change', e=>{ state.settings.autoSave = e.target.checked; persist(true); renderDrawer(); });
   $('#addRuleBtn').addEventListener('click', ()=>{
     state.settings.pricingRules.push({id:uid(), start:0, price:0});
     persist(); renderDrawer(); renderResults();
