@@ -292,6 +292,17 @@ html[data-theme="dark"] .score-value, html[data-theme="minimal-dark"] .score-val
   .score-actions .btn{min-height:42px; font-size:24px;}
   .score-reset{margin-top:8px;}
 }
+@media (max-width:700px) and (orientation:landscape){
+  .counter-view{padding:8px 10px 14px;}
+  .scoreboard{min-height:0; gap:10px;}
+  .score-side{padding:12px 10px;}
+  .score-name{font-size:clamp(16px,2.8vw,22px); padding:5px 4px;}
+  .score-value{font-size:clamp(52px,12vw,96px); margin:14px 0 18px;}
+  .score-actions{gap:8px;}
+  .score-actions .btn{min-height:42px; font-size:24px;}
+  .score-reset{margin-top:8px;}
+}
+html[data-mode="counter"],html[data-mode="counter"] body{touch-action:none; -webkit-text-size-adjust:100%;}
 
 /* confirm modal */
 #confirmOverlay{z-index:50;}
@@ -715,6 +726,8 @@ function tierClass(rate, rules){
 function renderAll(){
   document.documentElement.lang = state.settings.language;
   const counter = state.activeMode === 'counter';
+  document.documentElement.dataset.mode = counter ? 'counter' : 'split';
+  applyCounterZoomLock(counter);
   document.title = counter ? t('scoreCounterTitle') : 'Badminton Split';
   $('#splitView').hidden = counter;
   $('#counterView').hidden = !counter;
@@ -731,6 +744,15 @@ function renderAll(){
     $('#resultsTitle').textContent = t('results');
     renderCourts();
     renderResults();
+  }
+}
+
+function applyCounterZoomLock(counter){
+  const viewport = document.querySelector('meta[name="viewport"]');
+  if(viewport){
+    viewport.setAttribute('content', counter
+      ? 'width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover'
+      : 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover');
   }
 }
 
