@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -94,13 +92,14 @@ button{font-family:inherit;}
 .wrap{max-width:760px; margin:0 auto; padding:14px 16px 40px;}
 
 /* topbar */
-.topbar{display:flex; justify-content:flex-end; align-items:center; padding:10px 16px; max-width:760px; margin:0 auto;}
+.topbar{display:flex; justify-content:flex-end; align-items:center; gap:8px; padding:10px 16px; max-width:760px; margin:0 auto;}
 .icon-btn{
   display:inline-flex; align-items:center; justify-content:center;
-  width:38px; height:38px; border-radius:var(--radius-sm);
+  flex:0 0 38px; width:38px; height:38px; padding:0; border-radius:var(--radius-sm);
   border:1px solid var(--border); background:var(--surface); color:var(--text);
   cursor:pointer; transition:background .15s ease, border-color .15s ease;
 }
+.topbar .icon-btn .ic{flex:0 0 18px; width:18px; height:18px;}
 .icon-btn:hover{background:var(--surface-alt);}
 .icon-btn:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible{
   outline:2px solid var(--accent); outline-offset:2px;
@@ -259,6 +258,41 @@ select.dd{
 .danger-zone .btn{width:100%; justify-content:center; margin-top:8px;}
 .credit{text-align:center; font-size:11.5px; color:var(--text-faint); margin-top:22px; padding-top:14px; border-top:1px solid var(--border);}
 
+
+/* score counter */
+.counter-view{max-width:980px; margin:0 auto; padding:clamp(18px,4vw,48px) 16px 48px;}
+.scoreboard{display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); align-items:stretch; gap:clamp(12px,3vw,34px); min-height:min(72vh,620px);}
+.score-side{display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:0; padding:clamp(16px,4vw,42px) clamp(10px,3vw,30px); background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); box-shadow:var(--shadow-1);}
+.score-name{width:100%; max-width:360px; border:1px solid transparent; border-bottom-color:var(--border); background:transparent; color:var(--text); text-align:center; font-size:clamp(18px,3vw,26px); font-weight:600; padding:8px 6px; outline:none;}
+.score-name:focus{border-color:var(--accent); border-radius:var(--radius-sm);}
+.score-value{display:block; width:100%; border:1px solid transparent; background:transparent; color:var(--accent-strong); font-family:'Space Grotesk',system-ui,sans-serif; font-variant-numeric:tabular-nums; font-size:clamp(72px,18vw,180px); line-height:1; letter-spacing:-.06em; font-weight:700; margin:clamp(20px,6vw,56px) 0; overflow-wrap:anywhere; text-align:center; outline:none; -moz-appearance:textfield;}
+.score-value::-webkit-outer-spin-button,.score-value::-webkit-inner-spin-button{margin:0; -webkit-appearance:none;}
+.score-value:focus{border-color:var(--accent); border-radius:var(--radius-sm);}
+html[data-theme="dark"] .score-value, html[data-theme="minimal-dark"] .score-value{color:var(--accent);}
+.score-actions{display:flex; gap:10px; width:100%; max-width:360px;}
+.score-actions .btn{flex:1; justify-content:center; min-height:52px; font-size:28px; line-height:1;}
+.score-actions .btn:active{transform:translateY(1px);}
+.score-divider{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; color:var(--text-faint); font-family:'Space Grotesk',system-ui,sans-serif; font-size:20px; font-weight:600;}
+.score-divider::before,.score-divider::after{content:""; width:1px; flex:1; background:var(--border);}
+.score-reset{display:flex; justify-content:center; margin-top:18px;}
+.counter-portrait{display:none; text-align:center; color:var(--text-muted); background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:34px 22px; box-shadow:var(--shadow-1);}
+.counter-portrait .portrait-icon{font-size:38px; color:var(--accent); margin-bottom:10px;}
+.counter-portrait strong{display:block; color:var(--text); font-size:17px; margin-bottom:5px;}
+.counter-portrait span{font-size:13px;}
+@media (max-width:700px) and (orientation:portrait){
+  .counter-view{padding-top:18px;}
+  .scoreboard,.score-reset{display:none;}
+  .counter-portrait{display:block;}
+}
+@media (max-width:560px) and (orientation:landscape){
+  .counter-view{padding:10px 12px 20px;}
+  .scoreboard{min-height:calc(100vh - 78px); gap:8px;}
+  .score-side{padding:10px 8px;}
+  .score-value{margin:12px 0 18px; font-size:clamp(58px,17vw,120px);}
+  .score-actions .btn{min-height:42px; font-size:24px;}
+  .score-reset{margin-top:8px;}
+}
+
 /* confirm modal */
 #confirmOverlay{z-index:50;}
 .confirm-modal{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:51; padding:20px; opacity:0; pointer-events:none; transition:opacity .15s ease;}
@@ -282,8 +316,10 @@ select.dd{
 </head>
 <body>
 <div class="topbar">
+  <button class="icon-btn" id="modeBtn" aria-label="Score counter"></button>
   <button class="icon-btn" id="settingsBtn" aria-label="Settings"></button>
 </div>
+<div id="splitView">
 <div class="wrap">
   <div class="summary" id="summary"></div>
   <div class="section-head">
@@ -296,6 +332,9 @@ select.dd{
   </div>
   <div id="results"></div>
 </div>
+</div>
+
+<div id="counterView" class="counter-view" hidden></div>
 
 <div class="overlay" id="overlay"></div>
 <div class="drawer" id="drawer" role="dialog" aria-label="Settings">
@@ -328,7 +367,7 @@ const ICON = {
   trash:'<path d="M4 7h16"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13"/><path d="M10 11v6M14 11v6"/>',
   copy:'<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',
   chevronDown:'<path d="M6 9l6 6 6-6"/>',
-  gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 13.5c.1-.5.1-1 0-1.5l1.6-1.2-1.6-2.8-1.9.5a7.9 7.9 0 0 0-1.3-.8L15.8 5h-3.6l-.4 2.2c-.5.2-.9.4-1.3.8l-1.9-.5-1.6 2.8 1.6 1.2c-.1.5-.1 1 0 1.5L7 15.7l1.6 2.8 1.9-.5c.4.3.8.6 1.3.8l.4 2.2h3.6l.4-2.2c.5-.2.9-.5 1.3-.8l1.9.5 1.6-2.8-1.6-1.2z"/>',
+  gear:'<path d="M5 7h14M5 12h14M5 17h14"/><circle cx="9" cy="7" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="11" cy="17" r="1.6"/>',
   close:'<path d="M6 6l12 12M18 6L6 18"/>',
   warning:'<path d="M12 3l10 18H2z"/><path d="M12 10v4M12 17.5v.1"/>',
   users:'<circle cx="9" cy="8" r="3"/><path d="M2 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/><circle cx="17" cy="9" r="2.5"/><path d="M15.5 14.2c2.7.4 4.5 2.4 4.5 5.8"/>',
@@ -336,7 +375,9 @@ const ICON = {
   court:'<rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M12 5v14M3 12h18"/>',
   clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
   remove:'<path d="M18 6L6 18M6 6l12 12"/>',
-  check:'<path d="M5 12l4 4L19 6"/>'
+  check:'<path d="M5 12l4 4L19 6"/>',
+  switchToCounter:'<rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 5v14M16 5v14M4 12h16"/>',
+  switchToSplit:'<path d="M5 8h14M5 16h14M8 5v14M16 5v14"/>'
 };
 function ic(name, cls){ return `<svg class="ic ${cls||''}" viewBox="0 0 24 24">${ICON[name]||''}</svg>`; }
 
@@ -376,7 +417,8 @@ const STR = {
     outsideBooking:'เวลาของผู้เล่นอยู่นอกช่วงเวลาที่จองคอร์ด',
     invalidTime:'รูปแบบเวลาไม่ถูกต้อง', mixedRates:'หลายอัตรา',
     unassignedNote:amt=>`มี ${amt} ที่ไม่ถูกเรียกเก็บจากใครเลย เนื่องจากไม่มีผู้เล่นในบางช่วงเวลา`,
-    start:'เริ่ม', end:'สิ้นสุด'
+    start:'เริ่ม', end:'สิ้นสุด',
+    scoreCounter:'นับคะแนน', badmintonSplit:'แบ่งค่าใช้จ่าย', scoreCounterTitle:'นับคะแนนแบดมินตัน', rotateLandscape:'กรุณาหมุนอุปกรณ์เป็นแนวนอน', rotateLandscapeDesc:'โหมดนับคะแนนรองรับการใช้งานแนวนอนเท่านั้น', playerLeft:'ผู้เล่น 1', playerRight:'ผู้เล่น 2', decrement:'ลดคะแนน', increment:'เพิ่มคะแนน', resetScore:'รีเซ็ตคะแนน', confirmResetScoreTitle:'รีเซ็ตคะแนน', confirmResetScore:'ต้องการรีเซ็ตคะแนนของผู้เล่นทั้งสองคนใช่หรือไม่?', scoreVs:'VS'
   },
   en:{
     addCourt:'Add court', courts:'Courts', players:'Players', total:'Total',
@@ -412,7 +454,8 @@ const STR = {
     outsideBooking:"Player time falls outside the court's booking time",
     invalidTime:'Invalid time', mixedRates:'Mixed rates',
     unassignedNote:amt=>`${amt} is unassigned because no player was active during part of the booking.`,
-    start:'Start', end:'End'
+    start:'Start', end:'End',
+    scoreCounter:'Score counter', badmintonSplit:'Badminton split', scoreCounterTitle:'Badminton Score Counter', rotateLandscape:'Please rotate your device', rotateLandscapeDesc:'Score counter works in landscape orientation only', playerLeft:'Player 1', playerRight:'Player 2', decrement:'Decrease score', increment:'Increase score', resetScore:'Reset score', confirmResetScoreTitle:'Reset score', confirmResetScore:'Reset both players’ scores to zero?', scoreVs:'VS'
   }
 };
 function t(key, ...args){
@@ -473,6 +516,8 @@ function uid(){ return 'id'+(idc++)+Math.random().toString(36).slice(2,7); }
 
 function defaultState(){
   return {
+    activeMode:'split',
+    scoreCounter:{leftName:'', rightName:'', leftScore:0, rightScore:0},
     settings:{
       language:'th', theme:'white', timeFormat:24, autoSave:true,
       pricingRules:[ {id:uid(), start:660, price:120}, {id:uid(), start:960, price:160} ]
@@ -490,6 +535,12 @@ function loadState(){
     const parsed = JSON.parse(raw);
     if(!parsed || !parsed.settings || !parsed.courts) return defaultState();
     let migrated = false;
+    if(!['split','counter'].includes(parsed.activeMode)){ parsed.activeMode = 'split'; migrated = true; }
+    if(!parsed.scoreCounter || typeof parsed.scoreCounter !== 'object'){ parsed.scoreCounter = {leftName:'', rightName:'', leftScore:0, rightScore:0}; migrated = true; }
+    const sc = parsed.scoreCounter;
+    if(typeof sc.leftName !== 'string'){ sc.leftName = ''; migrated = true; }
+    if(typeof sc.rightName !== 'string'){ sc.rightName = ''; migrated = true; }
+    ['leftScore','rightScore'].forEach(k=>{ const n = Number(sc[k]); if(!Number.isFinite(n)){ sc[k] = 0; migrated = true; } else if(sc[k] !== n){ sc[k] = n; migrated = true; } });
     if(typeof parsed.settings.autoSave!=='boolean'){ parsed.settings.autoSave = true; migrated = true; }
     if(Object.prototype.hasOwnProperty.call(parsed.settings, 'accuratePrice')){ delete parsed.settings.accuratePrice; migrated = true; }
     if(!['white','dark','minimal-dark'].includes(parsed.settings.theme)){
@@ -663,14 +714,79 @@ function tierClass(rate, rules){
 
 function renderAll(){
   document.documentElement.lang = state.settings.language;
-  $('#courtsTitle').textContent = t('courts');
-  $('#addCourtBtn').innerHTML = ic('plus')+`<span>${t('addCourt')}</span>`;
-  $('#resultsTitle').textContent = t('results');
+  const counter = state.activeMode === 'counter';
+  document.title = counter ? t('scoreCounterTitle') : 'Badminton Split';
+  $('#splitView').hidden = counter;
+  $('#counterView').hidden = !counter;
+  $('#modeBtn').innerHTML = ic(counter ? 'switchToSplit' : 'switchToCounter');
+  $('#modeBtn').setAttribute('aria-label', counter ? t('badmintonSplit') : t('scoreCounter'));
+  $('#modeBtn').setAttribute('title', counter ? t('badmintonSplit') : t('scoreCounter'));
   $('#settingsBtn').innerHTML = ic('gear');
   $('#closeDrawer').innerHTML = ic('close');
   $('#drawerTitle').textContent = t('settings');
-  renderCourts();
-  renderResults();
+  if(counter) renderCounter();
+  else {
+    $('#courtsTitle').textContent = t('courts');
+    $('#addCourtBtn').innerHTML = ic('plus')+`<span>${t('addCourt')}</span>`;
+    $('#resultsTitle').textContent = t('results');
+    renderCourts();
+    renderResults();
+  }
+}
+
+function renderCounter(){
+  const sc = state.scoreCounter;
+  $('#counterView').innerHTML = `
+    <div class="counter-portrait">
+      <div class="portrait-icon">↔</div>
+      <strong>${t('rotateLandscape')}</strong>
+      <span>${t('rotateLandscapeDesc')}</span>
+    </div>
+    <div class="scoreboard" aria-label="${t('scoreCounterTitle')}">
+      ${scoreSideTemplate('left', sc.leftName, sc.leftScore, t('playerLeft'))}
+      <div class="score-divider" aria-hidden="true">${t('scoreVs')}</div>
+      ${scoreSideTemplate('right', sc.rightName, sc.rightScore, t('playerRight'))}
+    </div>
+    <div class="score-reset"><button class="btn" id="resetScoreBtn">${ic('remove')}<span>${t('resetScore')}</span></button></div>`;
+  $('#counterView').querySelectorAll('[data-score-name]').forEach(input=>{
+    input.addEventListener('input', e=>{ state.scoreCounter[e.target.dataset.scoreName+'Name'] = e.target.value; persist(); });
+  });
+  $('#counterView').querySelectorAll('[data-score-input]').forEach(input=>{
+    input.addEventListener('input', e=>{
+      const cleaned = e.target.value.replace(/[^0-9-]/g,'').replace(/(?!^)-/g,'');
+      if(e.target.value !== cleaned) e.target.value = cleaned;
+      if(/^-?\d+$/.test(cleaned)){
+        state.scoreCounter[e.target.dataset.scoreInput] = Number(cleaned);
+        persist();
+      }
+    });
+    input.addEventListener('blur', e=>{
+      if(!/^-?\d+$/.test(e.target.value)) renderCounter();
+    });
+  });
+  $('#counterView').querySelectorAll('[data-score-change]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const side = btn.dataset.scoreChange;
+      const key = side+'Score';
+      state.scoreCounter[key] = Number(state.scoreCounter[key] || 0) + Number(btn.dataset.delta);
+      persist();
+      renderCounter();
+    });
+  });
+  $('#resetScoreBtn').addEventListener('click', async ()=>{
+    const ok = await showConfirm({title:t('confirmResetScoreTitle'), message:t('confirmResetScore'), confirmLabel:t('confirm'), danger:false});
+    if(ok){ state.scoreCounter.leftScore = 0; state.scoreCounter.rightScore = 0; persist(); renderCounter(); }
+  });
+}
+function scoreSideTemplate(side, name, score, placeholder){
+  return `<section class="score-side" data-score-side="${side}">
+    <input class="score-name" data-score-name="${side}" value="${escapeAttr(name)}" placeholder="${escapeAttr(placeholder)}" aria-label="${escapeAttr(placeholder)}">
+    <input class="score-value num" data-score-input="${side}Score" type="number" step="1" value="${Number(score) || 0}" inputmode="numeric" aria-label="${escapeAttr(placeholder)} score">
+    <div class="score-actions">
+      <button class="btn" data-score-change="${side}" data-delta="-1" aria-label="${t('decrement')}">−</button>
+      <button class="btn primary" data-score-change="${side}" data-delta="1" aria-label="${t('increment')}">+</button>
+    </div>
+  </section>`;
 }
 
 function renderCourts(){
@@ -1000,7 +1116,7 @@ function renderDrawer(){
   `;
 
   $('#langSel').addEventListener('change', e=>{ state.settings.language=e.target.value; persist(); renderDrawer(); renderAll(); });
-  $('#themeSel').addEventListener('change', e=>{ state.settings.theme=e.target.value; persist(); applyTheme(); });
+  $('#themeSel').addEventListener('change', e=>{ state.settings.theme=e.target.value; persist(); applyTheme(); renderAll(); renderDrawer(); });
   $('#fmtCtl').querySelectorAll('button').forEach(b=>{
     b.addEventListener('click', ()=>{ state.settings.timeFormat = Number(b.getAttribute('data-v')); persist(); renderDrawer(); renderAll(); });
   });
@@ -1059,6 +1175,7 @@ function addCourt(){
 }
 
 $('#addCourtBtn').addEventListener('click', addCourt);
+$('#modeBtn').addEventListener('click', ()=>{ state.activeMode = state.activeMode==='counter' ? 'split' : 'counter'; persist(); renderAll(); });
 $('#settingsBtn').addEventListener('click', openDrawer);
 $('#closeDrawer').addEventListener('click', closeDrawerFn);
 $('#overlay').addEventListener('click', closeDrawerFn);
