@@ -272,6 +272,9 @@ html[data-theme="dark"] .score-value, html[data-theme="minimal-dark"] .score-val
 .score-actions{display:flex; gap:10px; width:100%; max-width:360px;}
 .score-actions .btn{flex:1; justify-content:center; min-height:52px; font-size:28px; line-height:1;}
 .score-actions .btn:active{transform:translateY(1px);}
+.score-utilities{display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:12px;}
+.score-utilities .btn{min-height:38px;}
+.score-utilities .btn:disabled{opacity:.45; cursor:not-allowed;}
 .score-divider{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; color:var(--text-faint); font-family:'Space Grotesk',system-ui,sans-serif; font-size:20px; font-weight:600;}
 .score-divider::before,.score-divider::after{content:""; width:1px; flex:1; background:var(--border);}
 .score-reset{display:flex; justify-content:center; margin-top:18px;}
@@ -302,7 +305,7 @@ html[data-theme="dark"] .score-value, html[data-theme="minimal-dark"] .score-val
   .score-actions .btn{min-height:42px; font-size:24px;}
   .score-reset{margin-top:8px;}
 }
-html[data-mode="counter"],html[data-mode="counter"] body{touch-action:none; -webkit-text-size-adjust:100%;}
+html[data-mode="counter"],html[data-mode="counter"] body{touch-action:pan-y; -webkit-text-size-adjust:100%; overflow-y:auto;}
 
 /* confirm modal */
 #confirmOverlay{z-index:50;}
@@ -388,7 +391,9 @@ const ICON = {
   remove:'<path d="M18 6L6 18M6 6l12 12"/>',
   check:'<path d="M5 12l4 4L19 6"/>',
   switchToCounter:'<rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 5v14M16 5v14M4 12h16"/>',
-  switchToSplit:'<path d="M5 8h14M5 16h14M8 5v14M16 5v14"/>'
+  switchToSplit:'<path d="M5 8h14M5 16h14M8 5v14M16 5v14"/>',
+  undo:'<path d="M9 7H4v5"/><path d="M4 12c1.7-4.2 7.2-6.3 11.2-3.4 2.8 2 3.7 5.8 2 8.7"/>',
+  fullscreen:'<path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/>'
 };
 function ic(name, cls){ return `<svg class="ic ${cls||''}" viewBox="0 0 24 24">${ICON[name]||''}</svg>`; }
 
@@ -429,7 +434,7 @@ const STR = {
     invalidTime:'รูปแบบเวลาไม่ถูกต้อง', mixedRates:'หลายอัตรา',
     unassignedNote:amt=>`มี ${amt} ที่ไม่ถูกเรียกเก็บจากใครเลย เนื่องจากไม่มีผู้เล่นในบางช่วงเวลา`,
     start:'เริ่ม', end:'สิ้นสุด',
-    scoreCounter:'นับคะแนน', badmintonSplit:'แบ่งค่าใช้จ่าย', scoreCounterTitle:'นับคะแนนแบดมินตัน', rotateLandscape:'กรุณาหมุนอุปกรณ์เป็นแนวนอน', rotateLandscapeDesc:'โหมดนับคะแนนรองรับการใช้งานแนวนอนเท่านั้น', playerLeft:'ผู้เล่น 1', playerRight:'ผู้เล่น 2', decrement:'ลดคะแนน', increment:'เพิ่มคะแนน', resetScore:'รีเซ็ตคะแนน', confirmResetScoreTitle:'รีเซ็ตคะแนน', confirmResetScore:'ต้องการรีเซ็ตคะแนนของผู้เล่นทั้งสองคนใช่หรือไม่?', scoreVs:'VS'
+    scoreCounter:'นับคะแนน', badmintonSplit:'แบ่งค่าใช้จ่าย', scoreCounterTitle:'นับคะแนนแบดมินตัน', rotateLandscape:'กรุณาหมุนอุปกรณ์เป็นแนวนอน', rotateLandscapeDesc:'โหมดนับคะแนนรองรับการใช้งานแนวนอนเท่านั้น', playerLeft:'ผู้เล่น 1', playerRight:'ผู้เล่น 2', decrement:'ลดคะแนน', increment:'เพิ่มคะแนน', resetScore:'รีเซ็ตคะแนน', undo:'ย้อนกลับ', fullscreen:'เต็มหน้าจอ', exitFullscreen:'ออกจากเต็มหน้าจอ', confirmResetScoreTitle:'รีเซ็ตคะแนน', confirmResetScore:'ต้องการรีเซ็ตคะแนนของผู้เล่นทั้งสองคนใช่หรือไม่?', scoreVs:'VS'
   },
   en:{
     addCourt:'Add court', courts:'Courts', players:'Players', total:'Total',
@@ -466,7 +471,7 @@ const STR = {
     invalidTime:'Invalid time', mixedRates:'Mixed rates',
     unassignedNote:amt=>`${amt} is unassigned because no player was active during part of the booking.`,
     start:'Start', end:'End',
-    scoreCounter:'Score counter', badmintonSplit:'Badminton split', scoreCounterTitle:'Badminton Score Counter', rotateLandscape:'Please rotate your device', rotateLandscapeDesc:'Score counter works in landscape orientation only', playerLeft:'Player 1', playerRight:'Player 2', decrement:'Decrease score', increment:'Increase score', resetScore:'Reset score', confirmResetScoreTitle:'Reset score', confirmResetScore:'Reset both players’ scores to zero?', scoreVs:'VS'
+    scoreCounter:'Score counter', badmintonSplit:'Badminton split', scoreCounterTitle:'Badminton Score Counter', rotateLandscape:'Please rotate your device', rotateLandscapeDesc:'Score counter works in landscape orientation only', playerLeft:'Player 1', playerRight:'Player 2', decrement:'Decrease score', increment:'Increase score', resetScore:'Reset score', undo:'Undo', fullscreen:'Fullscreen', exitFullscreen:'Exit fullscreen', confirmResetScoreTitle:'Reset score', confirmResetScore:'Reset both players’ scores to zero?', scoreVs:'VS'
   }
 };
 function t(key, ...args){
@@ -538,6 +543,29 @@ function defaultState(){
 }
 let state = loadState();
 let expanded = new Set();
+let scoreUndo = [];
+
+function scoreSnapshot(){
+  return {leftScore:state.scoreCounter.leftScore, rightScore:state.scoreCounter.rightScore};
+}
+function rememberScore(){
+  scoreUndo.push(scoreSnapshot());
+  if(scoreUndo.length>50) scoreUndo.shift();
+}
+function undoScore(){
+  const previous = scoreUndo.pop();
+  if(!previous) return;
+  state.scoreCounter.leftScore = previous.leftScore;
+  state.scoreCounter.rightScore = previous.rightScore;
+  persist();
+  renderCounter();
+}
+async function toggleFullscreen(){
+  try{
+    if(document.fullscreenElement) await document.exitFullscreen();
+    else await document.documentElement.requestFullscreen();
+  }catch(e){}
+}
 
 function loadState(){
   try{
@@ -769,11 +797,16 @@ function renderCounter(){
       <div class="score-divider" aria-hidden="true">${t('scoreVs')}</div>
       ${scoreSideTemplate('right', sc.rightName, sc.rightScore, t('playerRight'))}
     </div>
-    <div class="score-reset"><button class="btn" id="resetScoreBtn">${ic('remove')}<span>${t('resetScore')}</span></button></div>`;
+    <div class="score-reset"><button class="btn" id="resetScoreBtn">${ic('remove')}<span>${t('resetScore')}</span></button></div>
+    <div class="score-utilities">
+      <button class="btn sm" id="undoScoreBtn" ${scoreUndo.length?'':'disabled'}>${ic('undo')}<span>${t('undo')}</span></button>
+      <button class="btn sm" id="fullscreenBtn">${ic('fullscreen')}<span>${document.fullscreenElement?t('exitFullscreen'):t('fullscreen')}</span></button>
+    </div>`;
   $('#counterView').querySelectorAll('[data-score-name]').forEach(input=>{
     input.addEventListener('input', e=>{ state.scoreCounter[e.target.dataset.scoreName+'Name'] = e.target.value; persist(); });
   });
   $('#counterView').querySelectorAll('[data-score-input]').forEach(input=>{
+    input.addEventListener('focus', ()=>{ if(!input.dataset.historyStarted){ rememberScore(); input.dataset.historyStarted = '1'; } });
     input.addEventListener('input', e=>{
       const cleaned = e.target.value.replace(/[^0-9-]/g,'').replace(/(?!^)-/g,'');
       if(e.target.value !== cleaned) e.target.value = cleaned;
@@ -784,20 +817,24 @@ function renderCounter(){
     });
     input.addEventListener('blur', e=>{
       if(!/^-?\d+$/.test(e.target.value)) renderCounter();
+      else delete e.target.dataset.historyStarted;
     });
   });
   $('#counterView').querySelectorAll('[data-score-change]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const side = btn.dataset.scoreChange;
       const key = side+'Score';
+      rememberScore();
       state.scoreCounter[key] = Number(state.scoreCounter[key] || 0) + Number(btn.dataset.delta);
       persist();
       renderCounter();
     });
   });
+  $('#undoScoreBtn').addEventListener('click', undoScore);
+  $('#fullscreenBtn').addEventListener('click', toggleFullscreen);
   $('#resetScoreBtn').addEventListener('click', async ()=>{
     const ok = await showConfirm({title:t('confirmResetScoreTitle'), message:t('confirmResetScore'), confirmLabel:t('confirm'), danger:false});
-    if(ok){ state.scoreCounter.leftScore = 0; state.scoreCounter.rightScore = 0; persist(); renderCounter(); }
+    if(ok){ rememberScore(); state.scoreCounter.leftScore = 0; state.scoreCounter.rightScore = 0; persist(); renderCounter(); }
   });
 }
 function scoreSideTemplate(side, name, score, placeholder){
@@ -1201,6 +1238,7 @@ $('#modeBtn').addEventListener('click', ()=>{ state.activeMode = state.activeMod
 $('#settingsBtn').addEventListener('click', openDrawer);
 $('#closeDrawer').addEventListener('click', closeDrawerFn);
 $('#overlay').addEventListener('click', closeDrawerFn);
+document.addEventListener('fullscreenchange', ()=>{ if(state.activeMode==='counter') renderCounter(); });
 
 applyTheme();
 renderAll();
