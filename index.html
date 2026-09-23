@@ -269,6 +269,9 @@ select.dd{
 .score-value{display:block; width:100%; min-width:0; padding:0; border:1px solid transparent; background:transparent; color:var(--accent-strong); font-family:'Space Grotesk',system-ui,sans-serif; font-variant-numeric:tabular-nums; font-size:clamp(72px,18vw,180px); line-height:1; letter-spacing:-.045em; font-weight:700; margin:clamp(20px,6vw,56px) 0; overflow:visible; text-align:center; outline:none; -moz-appearance:textfield;}
 .score-value::-webkit-outer-spin-button,.score-value::-webkit-inner-spin-button{margin:0; -webkit-appearance:none;}
 .score-value:focus{border-color:var(--accent); border-radius:var(--radius-sm);}
+.score-value[data-digits="4"]{font-size:clamp(52px,12vw,120px);}
+.score-value[data-digits="5"]{font-size:clamp(44px,10vw,100px);}
+.score-value[data-digits="6"]{font-size:clamp(38px,9vw,86px);}
 html[data-theme="dark"] .score-value, html[data-theme="minimal-dark"] .score-value{color:var(--accent);}
 .score-actions{display:flex; gap:10px; width:100%; max-width:360px;}
 .score-actions .btn{flex:1; justify-content:center; min-height:52px; font-size:28px; line-height:1;}
@@ -285,7 +288,7 @@ html[data-theme="dark"] .score-value, html[data-theme="minimal-dark"] .score-val
 .counter-portrait span{font-size:13px;}
 @media (max-width:700px) and (orientation:portrait){
   .counter-view{padding-top:18px;}
-  .scoreboard,.score-reset{display:none;}
+  .scoreboard,.score-reset,.score-utilities{display:none;}
   .counter-portrait{display:block;}
 }
 @media (max-width:560px) and (orientation:landscape){
@@ -310,10 +313,13 @@ html[data-theme="dark"] .score-value, html[data-theme="minimal-dark"] .score-val
   .counter-view{max-width:none; padding:4px 10px 8px;}
   .scoreboard{min-height:calc(100vh - 78px); height:auto; gap:10px;}
   .score-side{padding:8px 10px;}
-  .score-name{font-size:clamp(15px,3.2vh,24px); padding:3px 4px;}
-  .score-value{font-size:clamp(48px,12vh,112px); margin:clamp(8px,2.2vh,20px) 0; letter-spacing:-.035em;}
+  .score-name{font-size:clamp(17px,3.8vh,26px); padding:3px 4px;}
+  .score-value{font-size:clamp(62px,min(18vh,10vw),148px); margin:clamp(8px,2vh,18px) 0; letter-spacing:-.035em;}
+  .score-value[data-digits="4"]{font-size:clamp(48px,min(13vh,7.2vw),104px);}
+  .score-value[data-digits="5"]{font-size:clamp(40px,min(11vh,6.2vw),88px);}
+  .score-value[data-digits="6"]{font-size:clamp(34px,min(9vh,5.4vw),74px);}
   .score-actions{gap:6px;}
-  .score-actions .btn{min-height:40px; font-size:23px;}
+  .score-actions .btn{min-height:48px; font-size:28px;}
   .score-reset{margin-top:5px;}
   .score-utilities{margin-top:5px;}
   .score-utilities .btn{min-height:34px; padding:5px 8px;}
@@ -405,7 +411,7 @@ const ICON = {
   check:'<path d="M5 12l4 4L19 6"/>',
   switchToCounter:'<rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 5v14M16 5v14M4 12h16"/>',
   switchToSplit:'<path d="M5 8h14M5 16h14M8 5v14M16 5v14"/>',
-  undo:'<path d="M9 6H4v5"/><path d="M4 11c1.6-4.1 7.1-6.1 11.1-3.2 2.8 2 3.7 5.8 1.9 8.6"/>'
+  undo:'<path d="M9 5L4 10l5 5"/><path d="M4 10h9a6 6 0 1 1 0 12h-2"/>'
 };
 function ic(name, cls){ return `<svg class="ic ${cls||''}" viewBox="0 0 24 24">${ICON[name]||''}</svg>`; }
 
@@ -786,7 +792,7 @@ function applyCounterZoomLock(counter){
   if(viewport){
     viewport.setAttribute('content', counter
       ? 'width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover'
-      : 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover');
+      : 'width=device-width, initial-scale=1.0, maximum-scale=5, minimum-scale=1.0, user-scalable=yes, viewport-fit=cover');
   }
 }
 
@@ -815,6 +821,7 @@ function renderCounter(){
     input.addEventListener('input', e=>{
       const cleaned = e.target.value.replace(/[^0-9-]/g,'').replace(/(?!^)-/g,'');
       if(e.target.value !== cleaned) e.target.value = cleaned;
+      e.target.dataset.digits = Math.min(6, cleaned.replace('-', '').length || 1);
       if(/^-?\d+$/.test(cleaned)){
         state.scoreCounter[e.target.dataset.scoreInput] = Number(cleaned);
         persist();
@@ -842,9 +849,11 @@ function renderCounter(){
   });
 }
 function scoreSideTemplate(side, name, score, placeholder){
+  const scoreText = String(Number(score) || 0);
+  const digits = Math.min(6, scoreText.replace('-', '').length);
   return `<section class="score-side" data-score-side="${side}">
     <input class="score-name" data-score-name="${side}" value="${escapeAttr(name)}" placeholder="${escapeAttr(placeholder)}" aria-label="${escapeAttr(placeholder)}">
-    <input class="score-value num" data-score-input="${side}Score" type="number" step="1" value="${Number(score) || 0}" inputmode="numeric" aria-label="${escapeAttr(placeholder)} score">
+    <input class="score-value num" data-digits="${digits}" data-score-input="${side}Score" type="number" step="1" value="${escapeAttr(scoreText)}" inputmode="numeric" aria-label="${escapeAttr(placeholder)} score">
     <div class="score-actions">
       <button class="btn" data-score-change="${side}" data-delta="-1" aria-label="${t('decrement')}">−</button>
       <button class="btn primary" data-score-change="${side}" data-delta="1" aria-label="${t('increment')}">+</button>
@@ -1126,6 +1135,12 @@ $('#confirmCancelBtn').addEventListener('click', ()=>closeConfirm(false));
 $('#confirmOverlay').addEventListener('click', ()=>closeConfirm(false));
 document.addEventListener('keydown', e=>{
   if(e.key==='Escape' && $('#confirmModal').classList.contains('open')) closeConfirm(false);
+});
+window.addEventListener('orientationchange', ()=>{
+  if(confirmResolve) requestAnimationFrame(()=>{
+    $('#confirmOverlay').classList.add('open');
+    $('#confirmModal').classList.add('open');
+  });
 });
 
 function renderDrawer(){
