@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -265,7 +266,7 @@ select.dd{
 .score-side{display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:0; padding:clamp(16px,4vw,42px) clamp(10px,3vw,30px); background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); box-shadow:var(--shadow-1);}
 .score-name{width:100%; max-width:360px; border:1px solid transparent; border-bottom-color:var(--border); background:transparent; color:var(--text); text-align:center; font-size:clamp(18px,3vw,26px); font-weight:600; padding:8px 6px; outline:none;}
 .score-name:focus{border-color:var(--accent); border-radius:var(--radius-sm);}
-.score-value{display:block; width:100%; border:1px solid transparent; background:transparent; color:var(--accent-strong); font-family:'Space Grotesk',system-ui,sans-serif; font-variant-numeric:tabular-nums; font-size:clamp(72px,18vw,180px); line-height:1; letter-spacing:-.06em; font-weight:700; margin:clamp(20px,6vw,56px) 0; overflow-wrap:anywhere; text-align:center; outline:none; -moz-appearance:textfield;}
+.score-value{display:block; width:100%; min-width:0; padding:0; border:1px solid transparent; background:transparent; color:var(--accent-strong); font-family:'Space Grotesk',system-ui,sans-serif; font-variant-numeric:tabular-nums; font-size:clamp(72px,18vw,180px); line-height:1; letter-spacing:-.045em; font-weight:700; margin:clamp(20px,6vw,56px) 0; overflow:visible; text-align:center; outline:none; -moz-appearance:textfield;}
 .score-value::-webkit-outer-spin-button,.score-value::-webkit-inner-spin-button{margin:0; -webkit-appearance:none;}
 .score-value:focus{border-color:var(--accent); border-radius:var(--radius-sm);}
 html[data-theme="dark"] .score-value, html[data-theme="minimal-dark"] .score-value{color:var(--accent);}
@@ -304,6 +305,18 @@ html[data-theme="dark"] .score-value, html[data-theme="minimal-dark"] .score-val
   .score-actions{gap:8px;}
   .score-actions .btn{min-height:42px; font-size:24px;}
   .score-reset{margin-top:8px;}
+}
+@media (orientation:landscape) and (max-width:1400px) and (max-height:1000px){
+  .counter-view{max-width:none; padding:4px 10px 8px;}
+  .scoreboard{min-height:calc(100vh - 78px); height:auto; gap:10px;}
+  .score-side{padding:8px 10px;}
+  .score-name{font-size:clamp(15px,3.2vh,24px); padding:3px 4px;}
+  .score-value{font-size:clamp(48px,12vh,112px); margin:clamp(8px,2.2vh,20px) 0; letter-spacing:-.035em;}
+  .score-actions{gap:6px;}
+  .score-actions .btn{min-height:40px; font-size:23px;}
+  .score-reset{margin-top:5px;}
+  .score-utilities{margin-top:5px;}
+  .score-utilities .btn{min-height:34px; padding:5px 8px;}
 }
 html[data-mode="counter"],html[data-mode="counter"] body{touch-action:pan-y; -webkit-text-size-adjust:100%; overflow-y:auto;}
 
@@ -392,8 +405,7 @@ const ICON = {
   check:'<path d="M5 12l4 4L19 6"/>',
   switchToCounter:'<rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 5v14M16 5v14M4 12h16"/>',
   switchToSplit:'<path d="M5 8h14M5 16h14M8 5v14M16 5v14"/>',
-  undo:'<path d="M9 7H4v5"/><path d="M4 12c1.7-4.2 7.2-6.3 11.2-3.4 2.8 2 3.7 5.8 2 8.7"/>',
-  fullscreen:'<path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/>'
+  undo:'<path d="M9 6H4v5"/><path d="M4 11c1.6-4.1 7.1-6.1 11.1-3.2 2.8 2 3.7 5.8 1.9 8.6"/>'
 };
 function ic(name, cls){ return `<svg class="ic ${cls||''}" viewBox="0 0 24 24">${ICON[name]||''}</svg>`; }
 
@@ -434,7 +446,7 @@ const STR = {
     invalidTime:'รูปแบบเวลาไม่ถูกต้อง', mixedRates:'หลายอัตรา',
     unassignedNote:amt=>`มี ${amt} ที่ไม่ถูกเรียกเก็บจากใครเลย เนื่องจากไม่มีผู้เล่นในบางช่วงเวลา`,
     start:'เริ่ม', end:'สิ้นสุด',
-    scoreCounter:'นับคะแนน', badmintonSplit:'แบ่งค่าใช้จ่าย', scoreCounterTitle:'นับคะแนนแบดมินตัน', rotateLandscape:'กรุณาหมุนอุปกรณ์เป็นแนวนอน', rotateLandscapeDesc:'โหมดนับคะแนนรองรับการใช้งานแนวนอนเท่านั้น', playerLeft:'ผู้เล่น 1', playerRight:'ผู้เล่น 2', decrement:'ลดคะแนน', increment:'เพิ่มคะแนน', resetScore:'รีเซ็ตคะแนน', undo:'ย้อนกลับ', fullscreen:'เต็มหน้าจอ', exitFullscreen:'ออกจากเต็มหน้าจอ', confirmResetScoreTitle:'รีเซ็ตคะแนน', confirmResetScore:'ต้องการรีเซ็ตคะแนนของผู้เล่นทั้งสองคนใช่หรือไม่?', scoreVs:'VS'
+    scoreCounter:'นับคะแนน', badmintonSplit:'แบ่งค่าใช้จ่าย', scoreCounterTitle:'นับคะแนนแบดมินตัน', rotateLandscape:'กรุณาหมุนอุปกรณ์เป็นแนวนอน', rotateLandscapeDesc:'โหมดนับคะแนนรองรับการใช้งานแนวนอนเท่านั้น', playerLeft:'ผู้เล่น 1', playerRight:'ผู้เล่น 2', decrement:'ลดคะแนน', increment:'เพิ่มคะแนน', resetScore:'รีเซ็ตคะแนน', undo:'ย้อนกลับ', confirmResetScoreTitle:'รีเซ็ตคะแนน', confirmResetScore:'ต้องการรีเซ็ตคะแนนของผู้เล่นทั้งสองคนใช่หรือไม่?', scoreVs:'VS'
   },
   en:{
     addCourt:'Add court', courts:'Courts', players:'Players', total:'Total',
@@ -471,7 +483,7 @@ const STR = {
     invalidTime:'Invalid time', mixedRates:'Mixed rates',
     unassignedNote:amt=>`${amt} is unassigned because no player was active during part of the booking.`,
     start:'Start', end:'End',
-    scoreCounter:'Score counter', badmintonSplit:'Badminton split', scoreCounterTitle:'Badminton Score Counter', rotateLandscape:'Please rotate your device', rotateLandscapeDesc:'Score counter works in landscape orientation only', playerLeft:'Player 1', playerRight:'Player 2', decrement:'Decrease score', increment:'Increase score', resetScore:'Reset score', undo:'Undo', fullscreen:'Fullscreen', exitFullscreen:'Exit fullscreen', confirmResetScoreTitle:'Reset score', confirmResetScore:'Reset both players’ scores to zero?', scoreVs:'VS'
+    scoreCounter:'Score counter', badmintonSplit:'Badminton split', scoreCounterTitle:'Badminton Score Counter', rotateLandscape:'Please rotate your device', rotateLandscapeDesc:'Score counter works in landscape orientation only', playerLeft:'Player 1', playerRight:'Player 2', decrement:'Decrease score', increment:'Increase score', resetScore:'Reset score', undo:'Undo', confirmResetScoreTitle:'Reset score', confirmResetScore:'Reset both players’ scores to zero?', scoreVs:'VS'
   }
 };
 function t(key, ...args){
@@ -559,12 +571,6 @@ function undoScore(){
   state.scoreCounter.rightScore = previous.rightScore;
   persist();
   renderCounter();
-}
-async function toggleFullscreen(){
-  try{
-    if(document.fullscreenElement) await document.exitFullscreen();
-    else await document.documentElement.requestFullscreen();
-  }catch(e){}
 }
 
 function loadState(){
@@ -800,7 +806,6 @@ function renderCounter(){
     <div class="score-reset"><button class="btn" id="resetScoreBtn">${ic('remove')}<span>${t('resetScore')}</span></button></div>
     <div class="score-utilities">
       <button class="btn sm" id="undoScoreBtn" ${scoreUndo.length?'':'disabled'}>${ic('undo')}<span>${t('undo')}</span></button>
-      <button class="btn sm" id="fullscreenBtn">${ic('fullscreen')}<span>${document.fullscreenElement?t('exitFullscreen'):t('fullscreen')}</span></button>
     </div>`;
   $('#counterView').querySelectorAll('[data-score-name]').forEach(input=>{
     input.addEventListener('input', e=>{ state.scoreCounter[e.target.dataset.scoreName+'Name'] = e.target.value; persist(); });
@@ -831,7 +836,6 @@ function renderCounter(){
     });
   });
   $('#undoScoreBtn').addEventListener('click', undoScore);
-  $('#fullscreenBtn').addEventListener('click', toggleFullscreen);
   $('#resetScoreBtn').addEventListener('click', async ()=>{
     const ok = await showConfirm({title:t('confirmResetScoreTitle'), message:t('confirmResetScore'), confirmLabel:t('confirm'), danger:false});
     if(ok){ rememberScore(); state.scoreCounter.leftScore = 0; state.scoreCounter.rightScore = 0; persist(); renderCounter(); }
@@ -1238,7 +1242,6 @@ $('#modeBtn').addEventListener('click', ()=>{ state.activeMode = state.activeMod
 $('#settingsBtn').addEventListener('click', openDrawer);
 $('#closeDrawer').addEventListener('click', closeDrawerFn);
 $('#overlay').addEventListener('click', closeDrawerFn);
-document.addEventListener('fullscreenchange', ()=>{ if(state.activeMode==='counter') renderCounter(); });
 
 applyTheme();
 renderAll();
