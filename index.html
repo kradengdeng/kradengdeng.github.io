@@ -2,7 +2,8 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5, minimum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+<meta name="theme-color" content="#F6F5F0">
 <title>Badminton Split</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -370,7 +371,7 @@ html[data-mode="counter"],html[data-mode="counter"] body{touch-action:pan-y; -we
 <div id="counterView" class="counter-view" hidden></div>
 
 <div class="overlay" id="overlay"></div>
-<div class="drawer" id="drawer" role="dialog" aria-label="Settings">
+<div class="drawer" id="drawer" role="dialog" aria-label="Settings" aria-hidden="true">
   <div class="drawer-head">
     <h2 id="drawerTitle"></h2>
     <button class="icon-btn" id="closeDrawer" aria-label="Close"></button>
@@ -618,6 +619,8 @@ function applyTheme(){
   if(mode==='white') resolved = 'light';
   else if(mode==='system') resolved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   document.documentElement.setAttribute('data-theme', resolved);
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
+  if(themeMeta) themeMeta.setAttribute('content', getComputedStyle(document.body).backgroundColor);
 }
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ()=>{ if(state.settings.theme==='system') applyTheme(); });
 
@@ -1109,8 +1112,8 @@ function renderResults(){
 }
 
 /* ---------- settings drawer ---------- */
-function openDrawer(){ $('#overlay').classList.add('open'); $('#drawer').classList.add('open'); renderDrawer(); }
-function closeDrawerFn(){ $('#overlay').classList.remove('open'); $('#drawer').classList.remove('open'); }
+function openDrawer(){ $('#overlay').classList.add('open'); $('#drawer').classList.add('open'); $('#drawer').setAttribute('aria-hidden','false'); renderDrawer(); }
+function closeDrawerFn(){ $('#overlay').classList.remove('open'); $('#drawer').classList.remove('open'); $('#drawer').setAttribute('aria-hidden','true'); }
 
 /* ---------- in-page confirm dialog ---------- */
 let confirmResolve = null;
@@ -1254,10 +1257,11 @@ function addCourt(){
 
 $('#addCourtBtn').addEventListener('click', addCourt);
 $('#modeBtn').addEventListener('click', ()=>{ state.activeMode = state.activeMode==='counter' ? 'split' : 'counter'; persist(); renderAll(); });
-$('#settingsBtn').addEventListener('click', openDrawer);
+$('#settingsBtn').addEventListener('click', ()=>{ if($('#drawer').classList.contains('open')) closeDrawerFn(); else openDrawer(); });
 $('#closeDrawer').addEventListener('click', closeDrawerFn);
 $('#overlay').addEventListener('click', closeDrawerFn);
 
+closeDrawerFn();
 applyTheme();
 renderAll();
 })();
